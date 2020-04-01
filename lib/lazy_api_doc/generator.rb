@@ -48,7 +48,7 @@ class LazyApiDoc::Generator
   end
 
   def parse_body(response)
-    if response[:content_type] == "application/json"
+    if response[:content_type].match?("json")
       JSON.parse(response[:body])
     else
       "Not a JSON response"
@@ -61,9 +61,9 @@ class LazyApiDoc::Generator
     variants = examples.map { |example| example.params.slice(*route[:path_params]) }
     ::LazyApiDoc::VariantsParser.new(variants).result["properties"].map do |param_name, schema|
       {
-        in: "path",
-        name: param_name,
-        schema: schema
+        'in' => "path",
+        'name' => param_name,
+        'schema' => schema
       }
     end
   end
@@ -74,9 +74,9 @@ class LazyApiDoc::Generator
     first = examples.first
     variants = examples.map { |example| example.params.except("controller", "action", *route[:path_params]) }
     {
-      content: {
+      'content' => {
         first.content_type => {
-          schema: ::LazyApiDoc::VariantsParser.new(variants).result
+          'schema' => ::LazyApiDoc::VariantsParser.new(variants).result
         }
       }
     }

@@ -6,5 +6,51 @@ require "yaml"
 
 module LazyApiDoc
   class Error < StandardError; end
-  # Your code goes here...
+
+  def self.generator
+    @generator ||= Generator.new
+  end
+
+  def self.add(example)
+    generator.add(example)
+  end
+
+  def self.add_spec(example)
+    add(
+      controller: example.request.params[:controller],
+      action: example.request.params[:action],
+      description: example.class.description,
+      verb: example.request.method,
+      params: example.request.params,
+      content_type: example.request.content_type.to_s,
+      response: {
+        code: example.response.status,
+        content_type: example.response.content_type.to_s,
+        body: example.response.body
+      }
+    )
+  end
+
+  def self.add_test(example)
+    add(
+      controller: example.request.params[:controller],
+      action: example.request.params[:action],
+      description: example.name.gsub(/\Atest_/, '').humanize,
+      verb: example.request.method,
+      params: example.request.params,
+      content_type: example.request.content_type.to_s,
+      response: {
+        code: example.response.status,
+        content_type: example.response.content_type.to_s,
+        body: example.response.body
+      }
+    )
+  end
+
+  def self.save_result(to: 'public/lazy_api_doc/api.yml', layout: 'public/lazy_api_doc/layout.yml')
+     layout = YAML.safe_load(File.read(Rails.root.join(layout)))
+     layout["paths"] ||= {}
+     layout["paths"].merge!(generator.result)
+     File.write(Rails.root.join(to), layout.to_yaml)
+  end
 end

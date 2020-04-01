@@ -11,7 +11,7 @@ class LazyApiDoc::VariantsParser
   end
 
   def parse(variant, variants)
-    optional = !variants.delete(OPTIONAL).nil?
+    variants.delete(OPTIONAL)
     case variant
     when Array
       parse_array(variant, variants)
@@ -19,7 +19,7 @@ class LazyApiDoc::VariantsParser
       parse_hash(variant, variants)
     else
       types_template(variants).merge("example" => variant)
-    end.merge("required" => !optional)
+    end
   end
 
   def types_template(variants)
@@ -64,14 +64,15 @@ class LazyApiDoc::VariantsParser
   end
 
   def parse_hash(variant, variants)
-    types_template(variants).merge(
-        "properties" => variant.map do |key, val|
-          [
-            key.to_s,
-            parse(val, variants.compact.map { |v| v.fetch(key, OPTIONAL) })
-          ]
-        end.to_h
-    )
+    result = types_template(variants)
+    result["properties"] = variant.map do |key, val|
+      [
+          key.to_s,
+          parse(val, variants.compact.map { |v| v.fetch(key, OPTIONAL) })
+      ]
+    end.to_h
+    result["required"] = variant.keys.select {|key| variants.compact.all? { |v| v.key?(key) } }
+    result
   end
 
   def parse_array(variant, variants)
