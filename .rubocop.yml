@@ -1,3 +1,11 @@
+# Rubocop rules explanation:
+#  https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
+#
+# Rubocop-Rspec rules explanation:
+#  https://github.com/rubocop-hq/rubocop-rspec/blob/master/config/default.yml
+
+require: rubocop-rspec
+
 Style/StringLiterals:
   Enabled: false
 
@@ -5,7 +13,33 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 Metrics/LineLength:
+  Exclude:
+    - lazy_api_doc.gemspec
   Max: 120
 
 Style/ExpandPathArguments:
+  Enabled: false
+
+Layout/AlignHash:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+
+Metrics/MethodLength:
+  Max: 50
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 25
+
+
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/DescribedClass:
   Enabled: false

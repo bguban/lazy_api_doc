@@ -48,9 +48,9 @@ module LazyApiDoc
   end
 
   def self.save_result(to: 'public/lazy_api_doc/api.yml', layout: 'public/lazy_api_doc/layout.yml')
-     layout = YAML.safe_load(File.read(Rails.root.join(layout)))
-     layout["paths"] ||= {}
-     layout["paths"].merge!(generator.result)
-     File.write(Rails.root.join(to), layout.to_yaml)
+    layout = YAML.safe_load(File.read(Rails.root.join(layout)))
+    layout["paths"] ||= {}
+    layout["paths"].merge!(generator.result)
+    File.write(Rails.root.join(to), layout.to_yaml)
   end
 end
