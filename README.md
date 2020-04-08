@@ -1,15 +1,16 @@
 # LazyApiDoc
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/lazy_api_doc`. To experiment with that code, run `bin/console` for an interactive prompt.
+A library to generate OpenAPI V3 documentation from tests. 
 
-TODO: Delete this and the text above, and describe your gem
+LazyApiDoc collects requests and responses from your controller and request specs, retrieves data types, optional 
+attributes, endpoint description and then generates OpenAPI documentation. 
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'lazy_api_doc'
+gem 'lazy_api_doc', group: :test
 ```
 
 And then execute:
@@ -20,19 +21,35 @@ Or install it yourself as:
 
     $ gem install lazy_api_doc
 
+Then run install task
+
+    $ rails g lazy_api_doc:install
+
 ## Usage
 
-TODO: Write usage instructions here
+Update files `public/lazy_api_doc/index.html` and `public/lazy_api_doc/layout.yml`. These files will be 
+used as templates to show the documentation. You need to set your application name, description and
+so on.
 
-## Development
+And just run your tests with `DOC=true` environment variable:
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+    $ DOC=true rspec
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+or
+
+    # DOC=true rake test
+
+The documentation will be placed `public/lazy_api_doc/api.yml`. To see it just run server
+
+    $ rails server
+    
+and navigate to http://localhost:3000/lazy_api_doc/
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/lazy_api_doc. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/lazy_api_doc/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/bguban/lazy_api_doc. This project is intended 
+to be a safe, welcoming space for collaboration, and contributors are expected to adhere to 
+the [code of conduct](https://github.com/bguban/lazy_api_doc/blob/master/CODE_OF_CONDUCT.md).
 
 
 ## License
@@ -41,4 +58,5 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the LazyApiDoc project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/lazy_api_doc/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the LazyApiDoc project's codebases, issue trackers, chat rooms and mailing lists is expected to 
+follow the [code of conduct](https://github.com/bguban/lazy_api_doc/blob/master/CODE_OF_CONDUCT.md).
