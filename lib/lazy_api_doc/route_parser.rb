@@ -9,7 +9,7 @@ module LazyApiDoc
     end
 
     def route
-      self.class.routes.find { |r| r[:action] == action && r[:controller] == controller && r[:verb] == verb }
+      self.class.routes.find { |r| r[:action] == action && r[:controller] == controller && r[:verb].include?(verb) }
     end
 
     def self.routes

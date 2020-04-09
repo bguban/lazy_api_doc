@@ -50,6 +50,8 @@ module LazyApiDoc
         "boolean"
       when String
         type_of_string(variant)
+      when Float
+        'number'
       else
         variant.class.name.downcase
       end

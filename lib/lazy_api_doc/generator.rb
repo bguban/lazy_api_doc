@@ -14,7 +14,7 @@ module LazyApiDoc
 
     def result
       result = {}
-      @examples.group_by { |example| [example.controller, example.action] }.map do |_, examples|
+      @examples.sort_by(&:source_location).group_by { |example| [example.controller, example.action] }.map do |_, examples|
         first = examples.first
         route = ::LazyApiDoc::RouteParser.new(first.controller, first.action, first.verb).route
         doc_path = route[:doc_path]
@@ -36,6 +36,7 @@ module LazyApiDoc
             [
               code,
               {
+                "description" => variants.first["description"].capitalize,
                 "content" => {
                   example.response[:content_type] => {
                     "schema" => ::LazyApiDoc::VariantsParser.new(variants.map { |v| parse_body(v.response) }).result
@@ -44,7 +45,7 @@ module LazyApiDoc
               }
             ]
           end.to_h
-        }
+        }.reject { |_, v| v.nil? }
       }
     end
 
@@ -63,6 +64,7 @@ module LazyApiDoc
       ::LazyApiDoc::VariantsParser.new(variants).result["properties"].map do |param_name, schema|
         {
           'in' => "path",
+          'required' => true,
           'name' => param_name,
           'schema' => schema
         }
