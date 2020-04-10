@@ -6,13 +6,9 @@ info:
     name: User Name
     email: user@example.com
     url: https://app.example.com
-tags:
 
 servers:
   - url: https://app.example.com
     description: description
 
 paths:
-
-components:
-  schemas:

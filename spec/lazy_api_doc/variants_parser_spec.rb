@@ -58,4 +58,25 @@ RSpec.describe LazyApiDoc::VariantsParser do
       )
     end
   end
+
+  context "when the first hash doesn't have keys of the second hash" do
+    let(:variants) { [{ a: 1 }, { b: 'foo' }] }
+
+    it "returns keys for both hashes" do
+      expect(parser.result).to eq(
+        "type" => "object",
+        "properties" => {
+          "a" => {
+            "type" => "integer",
+            "example" => 1
+          },
+          "b" => {
+            "type" => "string",
+            "example" => "foo"
+          }
+        },
+        "required" => []
+      )
+    end
+  end
 end

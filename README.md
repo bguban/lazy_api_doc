@@ -10,7 +10,7 @@ attributes, endpoint description and then generates OpenAPI documentation.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'lazy_api_doc', group: :test
+gem 'lazy_api_doc', require: false, group: :test
 ```
 
 And then execute:

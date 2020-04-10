@@ -15,7 +15,7 @@ module LazyApiDoc
     generator.add(example)
   end
 
-  def self.add_spec(example)
+  def self.add_spec(example) # rubocop:disable Metrics/AbcSize
     add(
       controller: example.request.params[:controller],
       action: example.request.params[:action],
@@ -24,6 +24,10 @@ module LazyApiDoc
       verb: example.request.method,
       params: example.request.params,
       content_type: example.request.content_type.to_s,
+      request: {
+        query_params: example.request.query_parameters,
+        full_path: example.request.fullpath
+      },
       response: {
         code: example.response.status,
         content_type: example.response.content_type.to_s,
@@ -32,7 +36,7 @@ module LazyApiDoc
     )
   end
 
-  def self.add_test(example)
+  def self.add_test(example) # rubocop:disable Metrics/AbcSize
     add(
       controller: example.request.params[:controller],
       action: example.request.params[:action],
@@ -41,6 +45,10 @@ module LazyApiDoc
       verb: example.request.method,
       params: example.request.params,
       content_type: example.request.content_type.to_s,
+      request: {
+        query_params: example.request.query_parameters,
+        full_path: example.request.fullpath
+      },
       response: {
         code: example.response.status,
         content_type: example.response.content_type.to_s,

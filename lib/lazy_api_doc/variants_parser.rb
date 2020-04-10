@@ -17,7 +17,7 @@ module LazyApiDoc
       when Array
         parse_array(variant, variants)
       when Hash
-        parse_hash(variant, variants)
+        parse_hash(variants)
       else
         types_template(variants).merge("example" => variant)
       end
@@ -66,8 +66,10 @@ module LazyApiDoc
       end
     end
 
-    def parse_hash(variant, variants)
-      result               = types_template(variants)
+    def parse_hash(variants)
+      result = types_template(variants)
+      variant = variants.select { |v| v.instance_of?(Hash) }.reverse_each
+                        .each_with_object({}) { |v, res| res.merge!(v) }
       result["properties"] = variant.map do |key, val|
         [
           key.to_s,

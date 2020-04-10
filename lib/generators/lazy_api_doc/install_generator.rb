@@ -23,6 +23,7 @@ module LazyApiDoc
         insert_into_file 'spec/rails_helper.rb', after: "RSpec.configure do |config|\n" do
           <<~RUBY
             if ENV['DOC']
+              require 'lazy_api_doc'
               require 'support/lazy_api_doc_interceptor'
 
               config.include LazyApiDocInterceptor, type: :request
@@ -41,7 +42,9 @@ module LazyApiDoc
 
         append_to_file 'test/test_helper.rb' do
           <<~RUBY
+
             if ENV['DOC']
+              require 'lazy_api_doc'
               require 'support/lazy_api_doc_interceptor'
 
               class ActionDispatch::IntegrationTest

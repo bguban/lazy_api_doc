@@ -1,3 +1,5 @@
+require 'cgi'
+
 module LazyApiDoc
   class Generator
     attr_reader :examples
@@ -14,7 +16,7 @@ module LazyApiDoc
 
     def result
       result = {}
-      @examples.sort_by(&:source_location).group_by { |example| [example.controller, example.action] }.map do |_, examples|
+      @examples.sort_by(&:source_location).group_by { |ex| [ex.controller, ex.action] }.map do |_, examples|
         first = examples.first
         route = ::LazyApiDoc::RouteParser.new(first.controller, first.action, first.verb).route
         doc_path = route[:doc_path]
@@ -24,13 +26,13 @@ module LazyApiDoc
       result
     end
 
-    def example_group(example, examples, route)
+    def example_group(example, examples, route) # rubocop:disable Metrics/AbcSize
       {
         route[:verb].downcase => {
           "tags" => [example.controller],
           "description" => example["description"].capitalize,
           "summary" => example.action,
-          "parameters" => path_params(route, examples),
+          "parameters" => path_params(route, examples) + query_params(examples),
           "requestBody" => body_params(route, examples),
           "responses" => examples.group_by { |ex| ex.response[:code] }.map do |code, variants|
             [
@@ -44,7 +46,7 @@ module LazyApiDoc
                 }
               }
             ]
-          end.to_h
+          end.to_h # rubocop:disable Style/MultilineBlockChain
         }.reject { |_, v| v.nil? }
       }
     end
@@ -60,11 +62,32 @@ module LazyApiDoc
     end
 
     def path_params(route, examples)
-      variants = examples.map { |example| example.params.slice(*route[:path_params]) }
-      ::LazyApiDoc::VariantsParser.new(variants).result["properties"].map do |param_name, schema|
+      path_variants = examples.map { |example| example.params.slice(*route[:path_params]) }
+      ::LazyApiDoc::VariantsParser.new(path_variants).result["properties"].map do |param_name, schema|
         {
           'in' => "path",
           'required' => true,
+          'name' => param_name,
+          'schema' => schema
+        }
+      end
+    end
+
+    def query_params(examples)
+      query_variants = examples.map do |example|
+        full_path = example.request[:full_path].split('?')
+        next {} if full_path.size == 1
+
+        # TODO: simplify it
+        full_path.last.split('&').map { |part| part.split('=').map { |each| CGI.unescape(each) } }.group_by(&:first)
+                 .transform_values { |v| v.map(&:last) }.map { |k, v| [k, k.match?(/\[\]\z/) ? v : v.first] }.to_h
+      end
+
+      parsed = ::LazyApiDoc::VariantsParser.new(query_variants).result
+      parsed["properties"].map do |param_name, schema|
+        {
+          'in' => "query",
+          'required' => parsed['required'].include?(param_name),
           'name' => param_name,
           'schema' => schema
         }

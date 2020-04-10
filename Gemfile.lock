@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lazy_api_doc (0.1.0)
+    lazy_api_doc (0.1.1)
 
 GEM
   remote: https://rubygems.org/
