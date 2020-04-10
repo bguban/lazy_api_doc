@@ -68,7 +68,7 @@ module LazyApiDoc
 
     def parse_hash(variants)
       result = types_template(variants)
-      variant = variants.select { |v| v.instance_of?(Hash) }.reverse_each
+      variant = variants.select { |v| v.is_a?(Hash) }.reverse_each
                         .each_with_object({}) { |v, res| res.merge!(v) }
       result["properties"] = variant.map do |key, val|
         [
