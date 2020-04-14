@@ -28,7 +28,7 @@ module LazyApiDoc
 
     def example_group(example, examples, route) # rubocop:disable Metrics/AbcSize
       {
-        route[:verb].downcase => {
+        example['verb'].downcase => {
           "tags" => [example.controller],
           "description" => example["description"].capitalize,
           "summary" => example.action,
@@ -95,9 +95,9 @@ module LazyApiDoc
     end
 
     def body_params(route, examples)
-      return if route[:verb] == "GET"
-
       first = examples.first
+      return unless %w[POST PATCH].include?(first['verb'])
+
       variants = examples.map { |example| example.params.except("controller", "action", *route[:path_params]) }
       {
         'content' => {
