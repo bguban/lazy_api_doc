@@ -83,7 +83,7 @@ module LazyApiDoc
     def parse_array(variant, variants)
       first = variant.first
       types_template(variants).merge(
-        "items"   => parse(first, variants.map(&:first).compact),
+        "items"   => parse(first, variants.compact.map(&:first).compact),
         "example" => variant
       )
     end

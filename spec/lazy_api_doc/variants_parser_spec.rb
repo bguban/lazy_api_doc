@@ -79,4 +79,16 @@ RSpec.describe LazyApiDoc::VariantsParser do
       )
     end
   end
+
+  context 'with optional array' do
+    let(:variants) { [[1], nil] }
+
+    it "returns" do
+      expect(parser.result).to eq(
+        "example" => [1],
+        "items" => { "example" => 1, "type" => "integer" },
+        "oneOf" => [{ "type" => "array" }, { "type" => "null" }]
+      )
+    end
+  end
 end
