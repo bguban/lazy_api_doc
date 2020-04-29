@@ -11,12 +11,13 @@ module LazyApiDoc
     def add(example)
       return if example[:controller] == "anonymous" # don't handle virtual controllers
 
-      @examples << OpenStruct.new(example)
+      @examples << example
     end
 
     def result
       result = {}
-      @examples.sort_by(&:source_location).group_by { |ex| [ex.controller, ex.action] }.map do |_, examples|
+      @examples.map { |example| OpenStruct.new(example) }.sort_by(&:source_location)
+               .group_by { |ex| [ex.controller, ex.action] }.map do |_, examples|
         first = examples.first
         route = ::LazyApiDoc::RouteParser.new(first.controller, first.action, first.verb).route
         doc_path = route[:doc_path]
