@@ -45,6 +45,18 @@ The documentation will be placed `public/lazy_api_doc/api.yml`. To see it just r
     
 and navigate to http://localhost:3000/lazy_api_doc/
 
+## How does it work under the hood?
+
+LazyApiDoc gathers your test requests and responses, group them by controllers and actions that were affected, and tries to guess the type of every field.
+```json
+user: {
+ id: 1, // Integer
+ name: "John Doe", // String,
+ created_at: "2020-05-17 20:15:47Z -0400" // DateTime
+}
+``` 
+After that, it just builds an OpenAPI specification based on it.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/bguban/lazy_api_doc. This project is intended 
