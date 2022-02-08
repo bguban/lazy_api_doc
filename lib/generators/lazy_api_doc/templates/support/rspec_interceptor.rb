@@ -3,8 +3,8 @@ module LazyApiDocInterceptor
 
   included do
     %w[get post patch put head delete].each do |method|
-      define_method(method) do |*args|
-        result = super(*args)
+      define_method(method) do |*args, **kwargs|
+        result = super(*args, **kwargs)
         # self.class.metadata[:doc] can be used to document only tests with doc: true metadata
         LazyApiDoc.add_spec(self)
         result

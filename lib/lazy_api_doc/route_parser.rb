@@ -15,34 +15,19 @@ module LazyApiDoc
     def self.routes
       return @routes if defined?(@routes)
 
-      all_routes = Rails.application.routes.routes
-      require "action_dispatch/routing/inspector"
-      inspector = ActionDispatch::Routing::RoutesInspector.new(all_routes)
-      @routes = inspector.format(JsonRoutesFormatter.new, ENV["CONTROLLER"])
+      @routes = Rails.application.routes.routes.map { |route| format(route) }
+    end
+
+    def self.format(route)
+      route = ActionDispatch::Routing::RouteWrapper.new(route)
+
+      {
+        doc_path: route.path.gsub("(.:format)", "").gsub(/(:\w+)/, '{\1}').delete(":"),
+        path_params: route.path.gsub("(.:format)", "").scan(/:\w+/).map { |p| p.delete(":").to_sym },
+        controller: route.controller,
+        action: route.action,
+        verb: route.verb.split('|')
+      }
     end
   end
-end
-
-class JsonRoutesFormatter
-  def initialize
-    @buffer = []
-  end
-
-  def result
-    @buffer
-  end
-
-  def section_title(_title); end
-
-  def section(routes)
-    @buffer = routes.map do |r|
-      r[:doc_path] = r[:path].gsub("(.:format)", "").gsub(/(:\w+)/, '{\1}').delete(":")
-      r[:path_params] = r[:path].gsub("(.:format)", "").scan(/:\w+/).map { |p| p.delete(":").to_sym }
-      r[:controller] = r[:reqs].split("#").first
-      r[:action] = r[:reqs].split("#").last.split(" ").first
-      r
-    end
-  end
-
-  def header(_routes); end
 end
