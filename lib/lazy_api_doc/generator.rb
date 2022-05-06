@@ -17,9 +17,12 @@ module LazyApiDoc
     def result
       result = {}
       @examples.map { |example| OpenStruct.new(example) }.sort_by(&:source_location)
-               .group_by { |ex| [ex.controller, ex.action] }.map do |_, examples|
+               .group_by { |ex| [ex.controller, ex.action] }
+               .each do |_, examples|
         first = examples.first
         route = ::LazyApiDoc::RouteParser.new(first.controller, first.action, first.verb).route
+        next if route.nil? # TODO: think about adding such cases to log
+
         doc_path = route[:doc_path]
         result[doc_path] ||= {}
         result[doc_path].merge!(example_group(first, examples, route))
