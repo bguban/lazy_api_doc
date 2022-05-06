@@ -8,7 +8,7 @@ module LazyApiDoc
   class Error < StandardError; end
 
   class << self
-    attr_accessor :path
+    attr_accessor :path, :example_file_ttl
 
     def configure
       yield self
@@ -19,6 +19,7 @@ module LazyApiDoc
       config = File.exist?(config_file) ? YAML.safe_load(ERB.new(File.read(config_file)).result) : {}
 
       self.path = ENV['LAZY_API_DOC_PATH'] || config['path'] || 'public/lazy_api_doc'
+      self.example_file_ttl = ENV['LAZY_API_DOC_EXAMPLE_FILE_TTL'] || config['example_file_ttl'] || 1800 # 30 minutes
     end
 
     def generator
@@ -80,12 +81,22 @@ module LazyApiDoc
 
     def save_examples
       FileUtils.mkdir("#{path}/examples") unless File.exist?("#{path}/examples")
-      File.write("#{path}/examples/rspec_#{ENV['TEST_ENV_NUMBER'] || SecureRandom.uuid}.json", generator.examples.to_json)
+      File.write(
+        "#{path}/examples/rspec_#{ENV['TEST_ENV_NUMBER'] || SecureRandom.uuid}.json",
+        {
+          created_at: Time.now.to_i,
+          examples: generator.examples
+        }.to_json
+      )
     end
 
     def load_examples
+      valid_time = Time.now.to_i - example_file_ttl
       examples = Dir["#{path}/examples/*.json"].flat_map do |file|
-        JSON.parse(File.read(file))
+        meta = JSON.parse(File.read(file))
+        next [] if meta['created_at'] < valid_time # do not handle outdated files
+
+        meta['examples']
       end
       generator.clear
       examples.each { |example| add(example) }
