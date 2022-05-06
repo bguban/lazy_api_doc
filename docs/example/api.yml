@@ -1,0 +1,1355 @@
+---
+openapi: 3.0.0
+info:
+  title: App name
+  version: 1.0.0
+  contact:
+    name: User Name
+    email: user@example.com
+    url: https://app.example.com
+servers:
+- url: https://app.example.com
+  description: description
+paths:
+  "/api/v1/price_alerts":
+    post:
+      tags:
+      - price_alerts
+      description: Basic create
+      summary: create
+      parameters: []
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: price_alerts
+                    attributes:
+                      type: object
+                      properties:
+                        operator:
+                          type: string
+                          example: lte
+                        value:
+                          type: integer
+                          example: 29
+                        webhook_url:
+                          type: string
+                          example: https://tqyumd.x.pipedream.net?foo=bar
+                        security_sa_id:
+                          type: integer
+                          example: 14
+                      required:
+                      - operator
+                      - value
+                      - webhook_url
+                      - security_sa_id
+                  required:
+                  - type
+                  - attributes
+              required:
+              - data
+      responses:
+        201:
+          description: Basic create
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '3'
+                      type:
+                        type: string
+                        example: price_alerts
+                      attributes:
+                        type: object
+                        properties:
+                          security_sa_id:
+                            type: integer
+                            example: 14
+                          status:
+                            type: string
+                            example: active
+                          operator:
+                            type: string
+                            example: lte
+                          value:
+                            type: number
+                            example: 29.0
+                          webhook_url:
+                            type: string
+                            example: https://en2tqyumd.x.pipedream.net?foo=bar
+                          triggered_at:
+                            type: 'null'
+                            example:
+                        required:
+                        - security_sa_id
+                        - status
+                        - operator
+                        - value
+                        - webhook_url
+                        - triggered_at
+                      relationships:
+                        type: object
+                        properties:
+                          security:
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: http://test/api/v1/securities/14
+                                required:
+                                - related
+                            required:
+                            - links
+                        required:
+                        - security
+                    required:
+                    - id
+                    - type
+                    - attributes
+                    - relationships
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+    get:
+      tags:
+      - price_alerts
+      description: Basic fetch
+      summary: index
+      parameters: []
+      responses:
+        200:
+          description: Basic fetch
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '1'
+                        type:
+                          type: string
+                          example: price_alerts
+                        attributes:
+                          type: object
+                          properties:
+                            security_sa_id:
+                              type: integer
+                              example: 2
+                            status:
+                              type: string
+                              example: active
+                            operator:
+                              type: string
+                              example: lte
+                            value:
+                              type: number
+                              example: 89.0
+                            webhook_url:
+                              type: string
+                              example: https://enf7v32tqyumd.x.pipedream.net?foo=bar
+                            triggered_at:
+                              type: 'null'
+                              example:
+                          required:
+                          - security_sa_id
+                          - status
+                          - operator
+                          - value
+                          - webhook_url
+                          - triggered_at
+                        relationships:
+                          type: object
+                          properties:
+                            security:
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: http://test/api/v1/securities/2
+                                  required:
+                                  - related
+                              required:
+                              - links
+                          required:
+                          - security
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      - relationships
+                    example:
+                    - id: '1'
+                      type: price_alerts
+                      attributes:
+                        security_sa_id: 2
+                        status: active
+                        operator: lte
+                        value: 89.0
+                        webhook_url: https://enf7v32tqyumd.x.pipedream.net?foo=bar
+                        triggered_at:
+                      relationships:
+                        security:
+                          links:
+                            related: http://test/api/v1/securities/2
+                    - id: '2'
+                      type: price_alerts
+                      attributes:
+                        security_sa_id: 3
+                        status: active
+                        operator: lte
+                        value: 60.0
+                        webhook_url: https://enf7v32tqyumd.x.pipedream.net?foo=bar
+                        triggered_at:
+                      relationships:
+                        security:
+                          links:
+                            related: http://test/api/v1/securities/3
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+  "/api/v1/price_alerts/{id}":
+    delete:
+      tags:
+      - price_alerts
+      description: Basic destroy
+      summary: destroy
+      parameters:
+      - in: path
+        required: true
+        name: id
+        schema:
+          type: string
+          example: '4'
+      responses:
+        200:
+          description: Basic destroy
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - meta
+    get:
+      tags:
+      - price_alerts
+      description: Basic fetch
+      summary: show
+      parameters:
+      - in: path
+        required: true
+        name: id
+        schema:
+          type: string
+          example: '5'
+      responses:
+        200:
+          description: Basic fetch
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '5'
+                      type:
+                        type: string
+                        example: price_alerts
+                      attributes:
+                        type: object
+                        properties:
+                          security_sa_id:
+                            type: integer
+                            example: 25
+                          status:
+                            type: string
+                            example: active
+                          operator:
+                            type: string
+                            example: gte
+                          value:
+                            type: number
+                            example: 48.0
+                          webhook_url:
+                            type: string
+                            example: https://enf7v32tqyumd.x.pipedream.net?foo=bar
+                          triggered_at:
+                            type: 'null'
+                            example:
+                        required:
+                        - security_sa_id
+                        - status
+                        - operator
+                        - value
+                        - webhook_url
+                        - triggered_at
+                      relationships:
+                        type: object
+                        properties:
+                          security:
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: http://test/api/v1/securities/25
+                                required:
+                                - related
+                            required:
+                            - links
+                        required:
+                        - security
+                    required:
+                    - id
+                    - type
+                    - attributes
+                    - relationships
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+    put:
+      tags:
+      - price_alerts
+      description: Basic update
+      summary: update
+      parameters:
+      - in: path
+        required: true
+        name: id
+        schema:
+          type: string
+          example: '18'
+      responses:
+        200:
+          description: Basic update
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '18'
+                      type:
+                        type: string
+                        example: price_alerts
+                      attributes:
+                        type: object
+                        properties:
+                          security_sa_id:
+                            type: integer
+                            example: 68
+                          status:
+                            type: string
+                            example: active
+                          operator:
+                            type: string
+                            example: lte
+                          value:
+                            type: number
+                            example: 40.0
+                          webhook_url:
+                            type: string
+                            example: https://enf7v32tqyumd.x.pipedream.net?foo=bar
+                          triggered_at:
+                            type: 'null'
+                            example:
+                        required:
+                        - security_sa_id
+                        - status
+                        - operator
+                        - value
+                        - webhook_url
+                        - triggered_at
+                      relationships:
+                        type: object
+                        properties:
+                          security:
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: http://test/api/v1/securities/68
+                                required:
+                                - related
+                            required:
+                            - links
+                        required:
+                        - security
+                    required:
+                    - id
+                    - type
+                    - attributes
+                    - relationships
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+  "/api/v1/retrievers":
+    post:
+      tags:
+      - retrievers
+      description: Basic create
+      summary: create
+      parameters: []
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: retrievers
+                    attributes:
+                      type: object
+                      properties:
+                        klass_name:
+                          type: string
+                          example: xignite_navs_puller
+                        symbol:
+                          type: string
+                          example: SYMBOL17
+                        security_id:
+                          type: integer
+                          example: 54
+                      required:
+                      - klass_name
+                      - symbol
+                      - security_id
+                  required:
+                  - type
+                  - attributes
+              required:
+              - data
+      responses:
+        201:
+          description: Basic create
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '30'
+                      type:
+                        type: string
+                        example: retrievers
+                      attributes:
+                        type: object
+                        properties:
+                          security_id:
+                            type: integer
+                            example: 54
+                          klass_name:
+                            type: string
+                            example: xignite_navs_puller
+                          symbol:
+                            type: string
+                            example: SYMBOL17
+                        required:
+                        - security_id
+                        - klass_name
+                        - symbol
+                      relationships:
+                        type: object
+                        properties:
+                          security:
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: http://test/api/v1/securities/54
+                                required:
+                                - related
+                            required:
+                            - links
+                        required:
+                        - security
+                    required:
+                    - id
+                    - type
+                    - attributes
+                    - relationships
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+    get:
+      tags:
+      - retrievers
+      description: Basic fetch
+      summary: index
+      parameters: []
+      responses:
+        200:
+          description: Basic fetch
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '9'
+                        type:
+                          type: string
+                          example: retrievers
+                        attributes:
+                          type: object
+                          properties:
+                            security_id:
+                              type: integer
+                              example: 16
+                            klass_name:
+                              type: string
+                              example: fin_api_puller
+                            symbol:
+                              type: string
+                              example: SYMBOL6
+                          required:
+                          - security_id
+                          - klass_name
+                          - symbol
+                        relationships:
+                          type: object
+                          properties:
+                            security:
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: http://test/api/v1/securities/16
+                                  required:
+                                  - related
+                              required:
+                              - links
+                          required:
+                          - security
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      - relationships
+                    example:
+                    - id: '9'
+                      type: retrievers
+                      attributes:
+                        security_id: 16
+                        klass_name: fin_api_puller
+                        symbol: SYMBOL6
+                      relationships:
+                        security:
+                          links:
+                            related: http://test/api/v1/securities/16
+                    - id: '10'
+                      type: retrievers
+                      attributes:
+                        security_id: 17
+                        klass_name: xignite_quote_puller
+                        symbol: SYMBOL7
+                      relationships:
+                        security:
+                          links:
+                            related: http://test/api/v1/securities/17
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+  "/api/v1/retrievers/{id}":
+    delete:
+      tags:
+      - retrievers
+      description: Basic destroy
+      summary: destroy
+      parameters:
+      - in: path
+        required: true
+        name: id
+        schema:
+          type: string
+          example: '31'
+      responses:
+        200:
+          description: Basic destroy
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - meta
+    get:
+      tags:
+      - retrievers
+      description: Basic fetch
+      summary: show
+      parameters:
+      - in: path
+        required: true
+        name: id
+        schema:
+          type: string
+          example: '5'
+      responses:
+        200:
+          description: Basic fetch
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '5'
+                      type:
+                        type: string
+                        example: retrievers
+                      attributes:
+                        type: object
+                        properties:
+                          security_id:
+                            type: integer
+                            example: 7
+                          klass_name:
+                            type: string
+                            example: fin_api_puller
+                          symbol:
+                            type: string
+                            example: SYMBOL1
+                        required:
+                        - security_id
+                        - klass_name
+                        - symbol
+                      relationships:
+                        type: object
+                        properties:
+                          security:
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: http://test/api/v1/securities/7
+                                required:
+                                - related
+                            required:
+                            - links
+                        required:
+                        - security
+                    required:
+                    - id
+                    - type
+                    - attributes
+                    - relationships
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+    put:
+      tags:
+      - retrievers
+      description: Basic update
+      summary: update
+      parameters:
+      - in: path
+        required: true
+        name: id
+        schema:
+          type: string
+          example: '11'
+      responses:
+        200:
+          description: Basic update
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '11'
+                      type:
+                        type: string
+                        example: retrievers
+                      attributes:
+                        type: object
+                        properties:
+                          security_id:
+                            type: integer
+                            example: 21
+                          klass_name:
+                            type: string
+                            example: fin_api_puller
+                          symbol:
+                            type: string
+                            example: SYMBOL9
+                        required:
+                        - security_id
+                        - klass_name
+                        - symbol
+                      relationships:
+                        type: object
+                        properties:
+                          security:
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: http://test/api/v1/securities/21
+                                required:
+                                - related
+                            required:
+                            - links
+                        required:
+                        - security
+                    required:
+                    - id
+                    - type
+                    - attributes
+                    - relationships
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+  "/api/v1/securities":
+    post:
+      tags:
+      - securities
+      description: Basic create
+      summary: create
+      parameters: []
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: securities
+                    attributes:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: stock
+                        sa_id:
+                          type: integer
+                          example: 67
+                        sa_slug:
+                          type: string
+                          example: slug65
+                        primary_retriever_klass_name:
+                          type: string
+                          example: xignite_navs_puller
+                        default_retriever_klass_name:
+                          type: string
+                          example: xignite_quote_puller
+                      required:
+                      - type
+                      - sa_id
+                      - sa_slug
+                      - primary_retriever_klass_name
+                      - default_retriever_klass_name
+                  required:
+                  - type
+                  - attributes
+              required:
+              - data
+      responses:
+        201:
+          description: Basic create
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '69'
+                      type:
+                        type: string
+                        example: securities
+                      attributes:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            example: stock
+                          sa_id:
+                            type: integer
+                            example: 67
+                          sa_slug:
+                            type: string
+                            example: slug65
+                          primary_retriever_klass_name:
+                            type: string
+                            example: xignite_navs_puller
+                          default_retriever_klass_name:
+                            type: string
+                            example: xignite_quote_puller
+                        required:
+                        - type
+                        - sa_id
+                        - sa_slug
+                        - primary_retriever_klass_name
+                        - default_retriever_klass_name
+                      relationships:
+                        type: object
+                        properties:
+                          retrievers:
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: http://test/api/v1/retrievers?filter[security_id]=69
+                                required:
+                                - related
+                            required:
+                            - links
+                        required:
+                        - retrievers
+                    required:
+                    - id
+                    - type
+                    - attributes
+                    - relationships
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+    get:
+      tags:
+      - securities
+      description: Basic fetch
+      summary: index
+      parameters: []
+      responses:
+        200:
+          description: Basic fetch
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '18'
+                        type:
+                          type: string
+                          example: securities
+                        attributes:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              example: mf
+                            sa_id:
+                              type: integer
+                              example: 17
+                            sa_slug:
+                              type: string
+                              example: slug14
+                            primary_retriever_klass_name:
+                              type: string
+                              example: xignite_index_puller
+                            default_retriever_klass_name:
+                              type: string
+                              example: iex_puller
+                          required:
+                          - type
+                          - sa_id
+                          - sa_slug
+                          - primary_retriever_klass_name
+                          - default_retriever_klass_name
+                        relationships:
+                          type: object
+                          properties:
+                            retrievers:
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: http://test/api/v1/retrievers?filter[security_id]=18
+                                  required:
+                                  - related
+                              required:
+                              - links
+                          required:
+                          - retrievers
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      - relationships
+                    example:
+                    - id: '18'
+                      type: securities
+                      attributes:
+                        type: mf
+                        sa_id: 17
+                        sa_slug: slug14
+                        primary_retriever_klass_name: xignite_index_puller
+                        default_retriever_klass_name: iex_puller
+                      relationships:
+                        retrievers:
+                          links:
+                            related: http://test/api/v1/retrievers?filter[security_id]=18
+                    - id: '19'
+                      type: securities
+                      attributes:
+                        type: crypto
+                        sa_id: 18
+                        sa_slug: slug15
+                        primary_retriever_klass_name: xignite_quote_puller
+                        default_retriever_klass_name: iex_puller
+                      relationships:
+                        retrievers:
+                          links:
+                            related: http://test/api/v1/retrievers?filter[security_id]=19
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+  "/api/v1/securities/{id}":
+    delete:
+      tags:
+      - securities
+      description: Basic destroy
+      summary: destroy
+      parameters:
+      - in: path
+        required: true
+        name: id
+        schema:
+          type: string
+          example: '55'
+      responses:
+        200:
+          description: Basic destroy
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - meta
+    get:
+      tags:
+      - securities
+      description: Basic fetch
+      summary: show
+      parameters:
+      - in: path
+        required: true
+        name: id
+        schema:
+          type: string
+          example: '29'
+      responses:
+        200:
+          description: Basic fetch
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '29'
+                      type:
+                        type: string
+                        example: securities
+                      attributes:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            example: stock
+                          sa_id:
+                            type: integer
+                            example: 28
+                          sa_slug:
+                            type: string
+                            example: slug25
+                          primary_retriever_klass_name:
+                            type: string
+                            example: trading_economics_puller
+                          default_retriever_klass_name:
+                            type: string
+                            example: trading_economics_puller
+                        required:
+                        - type
+                        - sa_id
+                        - sa_slug
+                        - primary_retriever_klass_name
+                        - default_retriever_klass_name
+                      relationships:
+                        type: object
+                        properties:
+                          retrievers:
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: http://test/api/v1/retrievers?filter[security_id]=29
+                                required:
+                                - related
+                            required:
+                            - links
+                        required:
+                        - retrievers
+                    required:
+                    - id
+                    - type
+                    - attributes
+                    - relationships
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+    put:
+      tags:
+      - securities
+      description: Basic update
+      summary: update
+      parameters:
+      - in: path
+        required: true
+        name: id
+        schema:
+          type: string
+          example: '20'
+      responses:
+        200:
+          description: Basic update
+          content:
+            application/vnd.api+json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '20'
+                      type:
+                        type: string
+                        example: securities
+                      attributes:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            example: mf
+                          sa_id:
+                            type: integer
+                            example: 19
+                          sa_slug:
+                            type: string
+                            example: slug16
+                          primary_retriever_klass_name:
+                            type: string
+                            example: xignite_navs_puller
+                          default_retriever_klass_name:
+                            type: string
+                            example: trading_economics_puller
+                        required:
+                        - type
+                        - sa_id
+                        - sa_slug
+                        - primary_retriever_klass_name
+                        - default_retriever_klass_name
+                      relationships:
+                        type: object
+                        properties:
+                          retrievers:
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: http://test/api/v1/retrievers?filter[security_id]=20
+                                required:
+                                - related
+                            required:
+                            - links
+                        required:
+                        - retrievers
+                    required:
+                    - id
+                    - type
+                    - attributes
+                    - relationships
+                  meta:
+                    type: object
+                    properties: {}
+                    required: []
+                required:
+                - data
+                - meta
+  "/real_time_quotes":
+    get:
+      tags:
+      - real_time_quotes
+      description: Get /index
+      summary: index
+      parameters:
+      - in: query
+        required: true
+        name: sa_ids
+        schema:
+          type: string
+          example: '7'
+      responses:
+        200:
+          description: Get /index
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  real_time_quotes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sa_id:
+                          type: integer
+                          example: 7
+                        high:
+                          type: number
+                          example: 76.77
+                        low:
+                          type: number
+                          example: 60.31
+                        open:
+                          type: number
+                          example: 73.7
+                        close:
+                          type: number
+                          example: 74.0
+                        prev_close:
+                          type: number
+                          example: 68.91
+                        last:
+                          type: number
+                          example: 61.39
+                        volume:
+                          type: integer
+                          example: 151
+                        last_time:
+                          type: string
+                          example: '2022-05-06T16:30:04.311-04:00'
+                        market_cap:
+                          type: integer
+                          example: 842898728
+                        ext_time:
+                          type: string
+                          example: '2022-05-06T16:30:04.311-04:00'
+                        ext_price:
+                          type: number
+                          example: 67.95
+                        ext_market:
+                          type: string
+                          example: pre
+                        updated_at:
+                          type: string
+                          example: '2022-05-06T16:30:04.311-04:00'
+                      required:
+                      - sa_id
+                      - high
+                      - low
+                      - open
+                      - close
+                      - prev_close
+                      - last
+                      - volume
+                      - last_time
+                      - market_cap
+                      - ext_time
+                      - ext_price
+                      - ext_market
+                      - updated_at
+                    example:
+                    - sa_id: 7
+                      high: 76.77
+                      low: 60.31
+                      open: 73.7
+                      close: 74.0
+                      prev_close: 68.91
+                      last: 61.39
+                      volume: 151
+                      last_time: '2022-05-06T16:30:04.311-04:00'
+                      market_cap: 842898728
+                      ext_time: '2022-05-06T16:30:04.311-04:00'
+                      ext_price: 67.95
+                      ext_market: pre
+                      updated_at: '2022-05-06T16:30:04.311-04:00'
+                required:
+                - real_time_quotes
+  "/status":
+    get:
+      tags:
+      - system_status
+      description: Systemstatuscontroller
+      summary: status
+      parameters: []
+      responses:
+        200:
+          description: Systemstatuscontroller
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  time:
+                    type: string
+                    example: '2022-05-06T16:30:04.901-04:00'
+                required:
+                - status
+                - time

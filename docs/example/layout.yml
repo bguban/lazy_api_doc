@@ -1,0 +1,14 @@
+openapi: 3.0.0
+info:
+  title: App name
+  version: "1.0.0"
+  contact:
+    name: User Name
+    email: user@example.com
+    url: https://app.example.com
+
+servers:
+  - url: https://app.example.com
+    description: description
+
+paths:

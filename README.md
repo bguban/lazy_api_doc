@@ -1,11 +1,12 @@
-TODO: Add an image of generated doc
-
 # LazyApiDoc
 
-A library to generate OpenAPI V3 documentation from tests. 
+A library to generate OpenAPI V3 documentation from tests. Try out the results 
+[here](https://bguban.github.io/lazy_api_doc/example).
 
 LazyApiDoc collects requests and responses from your controller and request specs, retrieves data types, optional 
 attributes, endpoint description and then generates OpenAPI documentation. 
+
+![screenshot](./screenshot.png)
 
 ## Installation
 
