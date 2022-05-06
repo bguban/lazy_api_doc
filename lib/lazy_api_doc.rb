@@ -25,48 +25,48 @@ module LazyApiDoc
       @generator ||= Generator.new
     end
 
-    def add(example)
-      generator.add(example)
+    def add(lazy_example)
+      generator.add(lazy_example)
     end
 
     def add_spec(rspec_example) # rubocop:disable Metrics/AbcSize
       add(
-        controller: rspec_example.request.params[:controller],
-        action: rspec_example.request.params[:action],
-        description: rspec_example.class.description,
-        source_location: [rspec_example.class.metadata[:file_path], rspec_example.class.metadata[:line_number]],
-        verb: rspec_example.request.method,
-        params: rspec_example.request.params,
-        content_type: rspec_example.request.content_type.to_s,
-        request: {
-          query_params: rspec_example.request.query_parameters,
-          full_path: rspec_example.request.fullpath
+        'controller' => rspec_example.request.params[:controller],
+        'action' => rspec_example.request.params[:action],
+        'description' => rspec_example.class.description,
+        'source_location' => [rspec_example.class.metadata[:file_path], rspec_example.class.metadata[:line_number]],
+        'verb' => rspec_example.request.method,
+        'params' => rspec_example.request.params,
+        'content_type' => rspec_example.request.content_type.to_s,
+        'request' => {
+          'query_params' => rspec_example.request.query_parameters,
+          'full_path' => rspec_example.request.fullpath
         },
-        response: {
-          code: rspec_example.response.status,
-          content_type: rspec_example.response.content_type.to_s,
-          body: rspec_example.response.body
+        'response' => {
+          'code' => rspec_example.response.status,
+          'content_type' => rspec_example.response.content_type.to_s,
+          'body' => rspec_example.response.body
         }
       )
     end
 
     def add_test(mini_test_example) # rubocop:disable Metrics/AbcSize
       add(
-        controller: mini_test_example.request.params[:controller],
-        action: mini_test_example.request.params[:action],
-        description: mini_test_example.name.gsub(/\Atest_/, '').humanize,
-        source_location: mini_test_example.method(mini_test_example.name).source_location,
-        verb: mini_test_example.request.method,
-        params: mini_test_example.request.params,
-        content_type: mini_test_example.request.content_type.to_s,
-        request: {
-          query_params: mini_test_example.request.query_parameters,
-          full_path: mini_test_example.request.fullpath
+        'controller' => mini_test_example.request.params[:controller],
+        'action' => mini_test_example.request.params[:action],
+        'description' => mini_test_example.name.gsub(/\Atest_/, '').humanize,
+        'source_location' => mini_test_example.method(mini_test_example.name).source_location,
+        'verb' => mini_test_example.request.method,
+        'params' => mini_test_example.request.params,
+        'content_type' => mini_test_example.request.content_type.to_s,
+        'request' => {
+          'query_params' => mini_test_example.request.query_parameters,
+          'full_path' => mini_test_example.request.fullpath
         },
-        response: {
-          code: mini_test_example.response.status,
-          content_type: mini_test_example.response.content_type.to_s,
-          body: mini_test_example.response.body
+        'response' => {
+          'code' => mini_test_example.response.status,
+          'content_type' => mini_test_example.response.content_type.to_s,
+          'body' => mini_test_example.response.body
         }
       )
     end
@@ -80,12 +80,12 @@ module LazyApiDoc
 
     def save_examples
       FileUtils.mkdir("#{path}/examples") unless File.exist?("#{path}/examples")
-      File.write("#{path}/examples/rspec_#{SecureRandom.uuid}.json", generator.examples.to_json)
+      File.write("#{path}/examples/rspec_#{ENV['TEST_ENV_NUMBER'] || SecureRandom.uuid}.json", generator.examples.to_json)
     end
 
     def load_examples
       examples = Dir["#{path}/examples/*.json"].flat_map do |file|
-        JSON.parse(File.read(file), symbolize_names: true)
+        JSON.parse(File.read(file))
       end
       generator.clear
       examples.each { |example| add(example) }
