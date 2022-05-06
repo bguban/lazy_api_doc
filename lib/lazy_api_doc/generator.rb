@@ -14,6 +14,10 @@ module LazyApiDoc
       @examples << example
     end
 
+    def clear
+      @examples = []
+    end
+
     def result
       result = {}
       @examples.map { |example| OpenStruct.new(example) }.sort_by(&:source_location)

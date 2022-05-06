@@ -1,3 +1,5 @@
+TODO: Add an image of generated doc
+
 # LazyApiDoc
 
 A library to generate OpenAPI V3 documentation from tests. 

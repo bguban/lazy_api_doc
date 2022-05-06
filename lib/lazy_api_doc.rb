@@ -29,53 +29,66 @@ module LazyApiDoc
       generator.add(example)
     end
 
-    def add_spec(example) # rubocop:disable Metrics/AbcSize
+    def add_spec(rspec_example) # rubocop:disable Metrics/AbcSize
       add(
-        controller: example.request.params[:controller],
-        action: example.request.params[:action],
-        description: example.class.description,
-        source_location: [example.class.metadata[:file_path], example.class.metadata[:line_number]],
-        verb: example.request.method,
-        params: example.request.params,
-        content_type: example.request.content_type.to_s,
+        controller: rspec_example.request.params[:controller],
+        action: rspec_example.request.params[:action],
+        description: rspec_example.class.description,
+        source_location: [rspec_example.class.metadata[:file_path], rspec_example.class.metadata[:line_number]],
+        verb: rspec_example.request.method,
+        params: rspec_example.request.params,
+        content_type: rspec_example.request.content_type.to_s,
         request: {
-          query_params: example.request.query_parameters,
-          full_path: example.request.fullpath
+          query_params: rspec_example.request.query_parameters,
+          full_path: rspec_example.request.fullpath
         },
         response: {
-          code: example.response.status,
-          content_type: example.response.content_type.to_s,
-          body: example.response.body
+          code: rspec_example.response.status,
+          content_type: rspec_example.response.content_type.to_s,
+          body: rspec_example.response.body
         }
       )
     end
 
-    def add_test(example) # rubocop:disable Metrics/AbcSize
+    def add_test(mini_test_example) # rubocop:disable Metrics/AbcSize
       add(
-        controller: example.request.params[:controller],
-        action: example.request.params[:action],
-        description: example.name.gsub(/\Atest_/, '').humanize,
-        source_location: example.method(example.name).source_location,
-        verb: example.request.method,
-        params: example.request.params,
-        content_type: example.request.content_type.to_s,
+        controller: mini_test_example.request.params[:controller],
+        action: mini_test_example.request.params[:action],
+        description: mini_test_example.name.gsub(/\Atest_/, '').humanize,
+        source_location: mini_test_example.method(mini_test_example.name).source_location,
+        verb: mini_test_example.request.method,
+        params: mini_test_example.request.params,
+        content_type: mini_test_example.request.content_type.to_s,
         request: {
-          query_params: example.request.query_parameters,
-          full_path: example.request.fullpath
+          query_params: mini_test_example.request.query_parameters,
+          full_path: mini_test_example.request.fullpath
         },
         response: {
-          code: example.response.status,
-          content_type: example.response.content_type.to_s,
-          body: example.response.body
+          code: mini_test_example.response.status,
+          content_type: mini_test_example.response.content_type.to_s,
+          body: mini_test_example.response.body
         }
       )
     end
 
-    def save_result
-      layout = YAML.safe_load(File.read(Rails.root.join("#{path}/layout.yml")))
+    def generate_documentation
+      layout = YAML.safe_load(File.read("#{path}/layout.yml"))
       layout["paths"] ||= {}
       layout["paths"].merge!(generator.result)
-      File.write(Rails.root.join("#{path}/api.yml"), layout.to_yaml)
+      File.write("#{path}/api.yml", layout.to_yaml)
+    end
+
+    def save_examples
+      FileUtils.mkdir("#{path}/examples") unless File.exist?("#{path}/examples")
+      File.write("#{path}/examples/rspec_#{SecureRandom.uuid}.json", generator.examples.to_json)
+    end
+
+    def load_examples
+      examples = Dir["#{path}/examples/*.json"].flat_map do |file|
+        JSON.parse(File.read(file), symbolize_names: true)
+      end
+      generator.clear
+      examples.each { |example| add(example) }
     end
   end
 end
