@@ -1,4 +1,5 @@
 require 'rails/generators'
+require 'lazy_api_doc'
 
 module LazyApiDoc
   module Generators
@@ -7,8 +8,17 @@ module LazyApiDoc
 
       desc "Copy base configuration for LazyApiDoc"
       def install
-        copy_file 'public/index.html', 'public/lazy_api_doc/index.html'
-        copy_file 'public/layout.yml', 'public/lazy_api_doc/layout.yml'
+        copy_file 'public/index.html', "#{LazyApiDoc.path}/index.html"
+        copy_file 'public/layout.yml', "#{LazyApiDoc.path}/layout.yml"
+
+        append_to_file '.gitignore' do
+          <<~TXT
+
+          # LazyApiDoc
+          #{LazyApiDoc.path}/api.yml
+          #{LazyApiDoc.path}/examples/*.json
+          TXT
+        end
 
         install_rspec if Dir.exist?('spec')
 
@@ -21,18 +31,18 @@ module LazyApiDoc
         copy_file 'support/rspec_interceptor.rb', 'spec/support/lazy_api_doc_interceptor.rb'
 
         insert_into_file 'spec/rails_helper.rb', after: "RSpec.configure do |config|\n" do
-          <<~RUBY
-            if ENV['DOC']
-              require 'lazy_api_doc'
-              require 'support/lazy_api_doc_interceptor'
+          <<-RUBY
+  if ENV['DOC']
+    require 'lazy_api_doc'
+    require 'support/lazy_api_doc_interceptor'
 
-              config.include LazyApiDocInterceptor, type: :request
-              config.include LazyApiDocInterceptor, type: :controller
+    config.include LazyApiDocInterceptor, type: :request
+    config.include LazyApiDocInterceptor, type: :controller
 
-              config.after(:suite) do
-                LazyApiDoc.save_result
-              end
-            end
+    config.after(:suite) do
+      LazyApiDoc.save_result
+    end
+  end
           RUBY
         end
       end
