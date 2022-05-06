@@ -27,6 +27,12 @@ Then run install task
 
     $ rails g lazy_api_doc:install
 
+You can customize the place where LazyApiDoc will put the documentation.
+```yaml
+# config/lazy_api_doc.yml
+path: 'doc/lazy_api_doc' # or use ENV['LAZY_API_DOC_PATH']
+```
+
 ## Usage
 
 Update files `public/lazy_api_doc/index.html` and `public/lazy_api_doc/layout.yml`. These files will be 
@@ -35,11 +41,11 @@ so on.
 
 And just run your tests with `DOC=true` environment variable:
 
-    $ DOC=true rspec
+    $ LAZY_API_DOC=true rspec
 
 or
 
-    # DOC=true rake test
+    # LAZY_API_DOC=true rake test
 
 The documentation will be placed `public/lazy_api_doc/api.yml`. To see it just run server
 
