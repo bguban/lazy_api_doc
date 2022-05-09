@@ -73,10 +73,10 @@ module LazyApiDoc
       result["properties"] = variant.map do |key, val|
         [
           key.to_s,
-          parse(val, variants.compact.map { |v| v.fetch(key, OPTIONAL) })
+          parse(val, variants.select { |v| v.is_a?(Hash) }.map { |v| v.fetch(key, OPTIONAL) })
         ]
       end.to_h
-      result["required"] = variant.keys.select { |key| variants.compact.all? { |v| v.key?(key) } }
+      result["required"] = variant.keys.select { |key| variants.select { |v| v.is_a?(Hash) }.all? { |v| v.key?(key) } }
       result
     end
 
