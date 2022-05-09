@@ -79,10 +79,10 @@ module LazyApiDoc
       File.write("#{path}/api.yml", layout.to_yaml)
     end
 
-    def save_examples
+    def save_examples(process_name)
       FileUtils.mkdir("#{path}/examples") unless File.exist?("#{path}/examples")
       File.write(
-        "#{path}/examples/rspec_#{ENV['TEST_ENV_NUMBER'] || SecureRandom.uuid}.json",
+        "#{path}/examples/#{process_name}_#{ENV['TEST_ENV_NUMBER'] || SecureRandom.uuid}.json",
         {
           created_at: Time.now.to_i,
           examples: generator.examples

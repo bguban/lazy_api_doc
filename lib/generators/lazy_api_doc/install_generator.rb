@@ -44,7 +44,7 @@ module LazyApiDoc
       # This peace of code handle using ParallelTests (tests runs in independent processes).
       # Just delete this block if you don't use ParallelTests
       if ENV['TEST_ENV_NUMBER'] && defined?(ParallelTests)
-        LazyApiDoc.save_examples
+        LazyApiDoc.save_examples('rspec')
         ParallelTests.wait_for_other_processes_to_finish if ParallelTests.first_process?
         LazyApiDoc.load_examples
       end
@@ -75,7 +75,7 @@ module LazyApiDoc
                 # This peace of code handle using ParallelTests (tests runs in independent processes).
                 # Just delete this block if you don't use ParallelTests
                 if ENV['TEST_ENV_NUMBER'] && defined?(ParallelTests)
-                  LazyApiDoc.save_examples
+                  LazyApiDoc.save_examples('minitest')
                   ParallelTests.wait_for_other_processes_to_finish if ParallelTests.first_process?
                   LazyApiDoc.load_examples
                 end
