@@ -85,12 +85,10 @@ module LazyApiDoc
 
     def query_params(examples)
       query_variants = examples.map do |example|
-        full_path = example.request['full_path'].split('?')
-        next {} if full_path.size == 1
+        _path, query = example.request['full_path'].split('?')
+        next {} unless query
 
-        # TODO: simplify it
-        full_path.last.split('&').map { |part| part.split('=').map { |each| CGI.unescape(each) } }.group_by(&:first)
-                 .transform_values { |v| v.map(&:last) }.map { |k, v| [k, k.match?(/\[\]\z/) ? v : v.first] }.to_h
+        CGI.parse(query).map { |k, v| [k.gsub('[]', ''), k.match?('\[\]') ? v : v.first] }.to_h
       end
 
       parsed = ::LazyApiDoc::VariantsParser.new(query_variants).result
