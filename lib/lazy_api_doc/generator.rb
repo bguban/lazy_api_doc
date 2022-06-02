@@ -39,7 +39,7 @@ module LazyApiDoc
     def example_group(example, examples, route) # rubocop:disable Metrics/AbcSize
       {
         example['verb'].downcase => {
-          "tags" => [example.controller],
+          "tags" => [example.controller || 'Ungrouped'],
           "description" => example["description"].capitalize,
           "summary" => example.action,
           "parameters" => path_params(route, examples) + query_params(examples),
