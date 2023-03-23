@@ -92,6 +92,27 @@ RSpec.describe LazyApiDoc::VariantsParser do
     end
   end
 
+  context 'when the first variant has an empty array' do
+    let(:variants) { [[], [{foo: 'bar'}]] }
+
+    it "returns" do
+      expect(parser.result).to eq(
+        "type"=>"array",
+        "items"=>{
+          "type"=>"object",
+          "properties"=>{
+            "foo"=>{
+              "type"=>"string",
+              "example"=>"bar"
+            }
+          },
+          "required"=>[:foo]
+        },
+        "example"=>[{:foo=>"bar"}]
+      )
+    end
+  end
+
   context 'when mix of hash and array' do
     let(:variants) { [{'a' => 1}, []] }
 

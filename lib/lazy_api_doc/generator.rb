@@ -2,6 +2,8 @@ require 'cgi'
 
 module LazyApiDoc
   class Generator
+    EXCLUDED_PARAMS = ["controller", "action", "format"]
+
     attr_reader :examples
 
     def initialize
@@ -42,7 +44,7 @@ module LazyApiDoc
           "tags" => [example.controller || 'Ungrouped'],
           "description" => example["description"].capitalize,
           "summary" => example.action,
-          "parameters" => path_params(route, examples) + query_params(examples),
+          "parameters" => path_params(route, examples) + query_params(route, examples),
           "requestBody" => body_params(route, examples),
           "responses" => examples.group_by { |ex| ex.response['code'] }.map do |code, variants|
             [
@@ -83,12 +85,14 @@ module LazyApiDoc
       end
     end
 
-    def query_params(examples)
+    def query_params(route, examples)
       query_variants = examples.map do |example|
         _path, query = example.request['full_path'].split('?')
         next {} unless query
 
-        CGI.parse(query).map { |k, v| [k.gsub('[]', ''), k.match?('\[\]') ? v : v.first] }.to_h
+        params = CGI.parse(query).map { |k, v| [k.gsub('[]', ''), k.match?('\[\]') ? v : v.first] }.to_h
+        params.merge!(example.params.except(*EXCLUDED_PARAMS, *route['path_params'])) if %w[GET DELETE HEAD].include?(example['verb'])
+        params
       end
 
       parsed = ::LazyApiDoc::VariantsParser.new(query_variants).result
@@ -104,9 +108,9 @@ module LazyApiDoc
 
     def body_params(route, examples)
       first = examples.first
-      return unless %w[POST PATCH].include?(first['verb'])
+      return unless %w[POST PATCH PUT].include?(first['verb'])
 
-      variants = examples.map { |example| example.params.except("controller", "action", "format", *route['path_params']) }
+      variants = examples.map { |example| example.params.except(*EXCLUDED_PARAMS, *route['path_params']) }
       {
         'content' => {
           first.content_type => {
