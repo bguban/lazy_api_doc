@@ -1,10 +1,13 @@
 # Rubocop rules explanation:
 #  https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
-#
-# Rubocop-Rspec rules explanation:
-#  https://github.com/rubocop-hq/rubocop-rspec/blob/master/config/default.yml
 
-require: rubocop-rspec
+AllCops:
+  DisplayCopNames: true
+  TargetRubyVersion: 3.0.3
+  NewCops: enable
+  Exclude:
+    - bin/bundle
+    - spec
 
 Style/StringLiterals:
   Enabled: false
@@ -13,14 +16,12 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 Metrics/LineLength:
-  Exclude:
-    - lazy_api_doc.gemspec
   Max: 120
 
 Style/ExpandPathArguments:
   Enabled: false
 
-Layout/AlignHash:
+Layout/HashAlignment:
   Enabled: false
 
 Metrics/BlockLength:
@@ -35,11 +36,3 @@ Style/Documentation:
 
 Metrics/AbcSize:
   Max: 25
-
-
-
-RSpec/ExampleLength:
-  Enabled: false
-
-RSpec/DescribedClass:
-  Enabled: false

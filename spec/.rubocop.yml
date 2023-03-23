@@ -1,0 +1,14 @@
+inherit_from:
+  - ../.rubocop.yml
+
+require:
+  - rubocop-rspec
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/DescribedClass:
+  Enabled: false
+
+RSpec/FactoryBot/CreateList:
+  Enabled: false
