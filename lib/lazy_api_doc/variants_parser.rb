@@ -15,7 +15,7 @@ module LazyApiDoc
       variants.delete(OPTIONAL)
       case variant
       when Array
-        variant = variants.find { |v| v.any? }
+        variant = variants.find { |v| v.any? } || variants.first
         parse_array(variant, variants)
       when Hash
         parse_hash(variants)
