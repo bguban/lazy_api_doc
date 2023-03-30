@@ -36,3 +36,6 @@ Style/Documentation:
 
 Metrics/AbcSize:
   Max: 25
+
+Style/WordArray:
+  Enabled: false
