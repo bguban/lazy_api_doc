@@ -12,3 +12,6 @@ RSpec/DescribedClass:
 
 RSpec/FactoryBot/CreateList:
   Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false

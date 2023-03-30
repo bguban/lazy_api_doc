@@ -38,7 +38,7 @@ module LazyApiDoc
 
     private
 
-    def example_group(example, examples, route) # rubocop:disable Metrics/AbcSize
+    def example_group(example, examples, route)
       {
         example['verb'].downcase => {
           "tags" => [example.controller || 'Ungrouped'],
@@ -91,8 +91,9 @@ module LazyApiDoc
                  else
                    {}
                  end
-        params.merge!(example.params.except(*EXCLUDED_PARAMS, *route['path_params'])) if %w[GET DELETE
-                                                                                            HEAD].include?(example['verb'])
+        if %w[GET DELETE HEAD].include?(example['verb'])
+          params.merge!(example.params.except(*EXCLUDED_PARAMS, *route['path_params']))
+        end
         params
       end
 

@@ -3,8 +3,9 @@
 
 AllCops:
   DisplayCopNames: true
-  TargetRubyVersion: 3.0.3
+  TargetRubyVersion: 2.3.0
   NewCops: enable
+  SuggestExtensions: false
   Exclude:
     - bin/bundle
     - spec
@@ -15,7 +16,7 @@ Style/StringLiterals:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
 
 Style/ExpandPathArguments:
@@ -35,7 +36,19 @@ Style/Documentation:
   Enabled: false
 
 Metrics/AbcSize:
-  Max: 25
+  Max: 30
 
 Style/WordArray:
   Enabled: false
+
+Style/OpenStructUse:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Max: 10
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/ClassLength:
+  Max: 150
