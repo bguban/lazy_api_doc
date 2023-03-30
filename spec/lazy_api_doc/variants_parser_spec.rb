@@ -93,45 +93,45 @@ RSpec.describe LazyApiDoc::VariantsParser do
   end
 
   context 'when the first variant has an empty array' do
-    let(:variants) { [[], [{foo: 'bar'}]] }
+    let(:variants) { [[], [{ foo: 'bar' }]] }
 
     it "returns" do
       expect(parser.result).to eq(
-        "type"=>"array",
-        "items"=>{
-          "type"=>"object",
-          "properties"=>{
-            "foo"=>{
-              "type"=>"string",
-              "example"=>"bar"
+        "type" => "array",
+        "items" => {
+          "type" => "object",
+          "properties" => {
+            "foo" => {
+              "type" => "string",
+              "example" => "bar"
             }
           },
-          "required"=>[:foo]
+          "required" => [:foo]
         },
-        "example"=>[{:foo=>"bar"}]
+        "example" => [{ foo: "bar" }]
       )
     end
   end
 
   context 'when mix of hash and array' do
-    let(:variants) { [{'a' => 1}, []] }
+    let(:variants) { [{ 'a' => 1 }, []] }
 
     it "returns" do
       expect(parser.result).to eq(
-                                 {
-                                   "oneOf" => [
-                                     {"type"=>"object"},
-                                     {"type"=>"array"}
-                                   ],
-                                   "properties" => {
-                                     "a" => {
-                                       "example"=>1,
-                                       "type"=>"integer"
-                                     }
-                                   },
-                                   "required"=>["a"]
-                                 }
-                               )
+        {
+          "oneOf" => [
+            { "type" => "object" },
+            { "type" => "array" }
+          ],
+          "properties" => {
+            "a" => {
+              "example" => 1,
+              "type" => "integer"
+            }
+          },
+          "required" => ["a"]
+        }
+      )
     end
   end
 end

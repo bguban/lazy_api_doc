@@ -2,7 +2,7 @@ require 'cgi'
 
 module LazyApiDoc
   class Generator
-    EXCLUDED_PARAMS = ["controller", "action", "format"]
+    EXCLUDED_PARAMS = ["controller", "action", "format"].freeze
 
     attr_reader :examples
 
@@ -46,20 +46,17 @@ module LazyApiDoc
           "summary" => example.action,
           "parameters" => path_params(route, examples) + query_params(route, examples),
           "requestBody" => body_params(route, examples),
-          "responses" => examples.group_by { |ex| ex.response['code'] }.map do |code, variants|
-            [
-              code,
-              {
-                "description" => variants.first["description"].capitalize,
+          "responses" => examples.group_by { |ex| ex.response['code'] }.transform_values do |variants|
+            {
+              "description" => variants.first["description"].capitalize,
                 "content" => {
                   example.response['content_type'] => {
                     "schema" => ::LazyApiDoc::VariantsParser.new(variants.map { |v| parse_body(v.response) }).result
                   }
                 }
-              }
-            ]
-          end.to_h # rubocop:disable Style/MultilineBlockChain
-        }.reject { |_, v| v.nil? }
+            }
+          end
+        }.compact
       }
     end
 
@@ -89,8 +86,13 @@ module LazyApiDoc
       query_variants = examples.map do |example|
         _path, query = example.request['full_path'].split('?')
 
-        params = query ? CGI.parse(query).map { |k, v| [k.gsub('[]', ''), k.match?('\[\]') ? v : v.first] }.to_h : {}
-        params.merge!(example.params.except(*EXCLUDED_PARAMS, *route['path_params'])) if %w[GET DELETE HEAD].include?(example['verb'])
+        params = if query
+                   CGI.parse(query).to_h { |k, v| [k.gsub('[]', ''), k.match?('\[\]') ? v : v.first] }
+                 else
+                   {}
+                 end
+        params.merge!(example.params.except(*EXCLUDED_PARAMS, *route['path_params'])) if %w[GET DELETE
+                                                                                            HEAD].include?(example['verb'])
         params
       end
 

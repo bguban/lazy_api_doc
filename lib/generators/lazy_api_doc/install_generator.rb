@@ -14,9 +14,9 @@ module LazyApiDoc
         append_to_file '.gitignore' do
           <<~TXT
 
-          # LazyApiDoc
-          #{LazyApiDoc.path}/api.yml
-          #{LazyApiDoc.path}/examples/*.json
+            # LazyApiDoc
+            #{LazyApiDoc.path}/api.yml
+            #{LazyApiDoc.path}/examples/*.json
           TXT
         end
 

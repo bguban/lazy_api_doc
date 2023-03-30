@@ -15,7 +15,7 @@ module LazyApiDoc
       variants.delete(OPTIONAL)
       case variant
       when Array
-        variant = variants.find { |v| v.any? } || variants.first
+        variant = variants.find(&:any?) || variants.first
         parse_array(variant, variants)
       when Hash
         parse_hash(variants)
@@ -70,13 +70,13 @@ module LazyApiDoc
     def parse_hash(variants)
       result = types_template(variants)
       variant = variants.select { |v| v.is_a?(Hash) }.reverse_each
-                        .each_with_object({}) { |v, res| res.merge!(v) }
-      result["properties"] = variant.map do |key, val|
+                        .with_object({}) { |v, res| res.merge!(v) }
+      result["properties"] = variant.to_h do |key, val|
         [
           key.to_s,
           parse(val, variants.select { |v| v.is_a?(Hash) }.map { |v| v.fetch(key, OPTIONAL) })
         ]
-      end.to_h
+      end
       result["required"] = variant.keys.select { |key| variants.select { |v| v.is_a?(Hash) }.all? { |v| v.key?(key) } }
       result
     end

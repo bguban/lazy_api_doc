@@ -80,7 +80,7 @@ module LazyApiDoc
     end
 
     def save_examples(process_name)
-      FileUtils.mkdir("#{path}/examples") unless File.exist?("#{path}/examples")
+      FileUtils.mkdir_p("#{path}/examples")
       File.write(
         "#{path}/examples/#{process_name}_#{ENV['TEST_ENV_NUMBER'] || SecureRandom.uuid}.json",
         {
