@@ -88,9 +88,8 @@ module LazyApiDoc
     def query_params(route, examples)
       query_variants = examples.map do |example|
         _path, query = example.request['full_path'].split('?')
-        next {} unless query
 
-        params = CGI.parse(query).map { |k, v| [k.gsub('[]', ''), k.match?('\[\]') ? v : v.first] }.to_h
+        params = query ? CGI.parse(query).map { |k, v| [k.gsub('[]', ''), k.match?('\[\]') ? v : v.first] }.to_h : {}
         params.merge!(example.params.except(*EXCLUDED_PARAMS, *route['path_params'])) if %w[GET DELETE HEAD].include?(example['verb'])
         params
       end
