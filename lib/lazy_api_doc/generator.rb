@@ -23,11 +23,10 @@ module LazyApiDoc
     def result
       result = {}
       @examples.map { |example| OpenStruct.new(example) }.sort_by(&:source_location)
-               .group_by { |ex| [ex.controller, ex.action] }
-               .each do |_, examples|
-        first = examples.first
-        route = ::LazyApiDoc::RouteParser.new(first.controller, first.action, first.verb).route
+               .group_by { |example| ::LazyApiDoc::RouteParser.find_by(example) }
+               .each do |route, examples|
         next if route.nil? # TODO: think about adding such cases to log
+        first = examples.first
 
         doc_path = route['doc_path']
         result[doc_path] ||= {}
@@ -91,8 +90,8 @@ module LazyApiDoc
                  else
                    {}
                  end
-        if %w[GET DELETE HEAD].include?(example['verb'])
-          params.merge!(example.params.except(*EXCLUDED_PARAMS, *route['path_params']))
+        if %w[GET HEAD].include?(example['verb'])
+          params.merge!(example.params.except(*EXCLUDED_PARAMS, *route['path_params'], *route['defaults'].keys))
         end
         params
       end
@@ -110,9 +109,9 @@ module LazyApiDoc
 
     def body_params(route, examples)
       first = examples.first
-      return unless %w[POST PATCH PUT].include?(first['verb'])
+      return unless %w[POST PATCH PUT DELETE].include?(first['verb'])
 
-      variants = examples.map { |example| example.params.except(*EXCLUDED_PARAMS, *route['path_params']) }
+      variants = examples.map { |example| example.params.except(*EXCLUDED_PARAMS, *route['path_params'], *route['defaults'].keys) }
       {
         'content' => {
           first.content_type => {

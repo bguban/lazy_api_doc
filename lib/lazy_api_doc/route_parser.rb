@@ -1,15 +1,9 @@
 module LazyApiDoc
   class RouteParser
-    attr_reader :controller, :action, :verb
-
-    def initialize(controller, action, verb)
-      @controller = controller
-      @action = action
-      @verb = verb
-    end
-
-    def route
-      self.class.routes.find { |r| r['action'] == action && r['controller'] == controller && r['verb'].include?(verb) }
+    def self.find_by(example)
+      r = routes.find do |r|
+        r['verb'].include?(example.verb) && example.params.slice(*r['defaults'].keys) == r['defaults']
+      end
     end
 
     def self.routes
@@ -20,13 +14,13 @@ module LazyApiDoc
 
     def self.format(route)
       route = ActionDispatch::Routing::RouteWrapper.new(route)
-
       {
         'doc_path' => route.path.gsub("(.:format)", "").gsub(/(:\w+)/, '{\1}').delete(":"),
         'path_params' => route.path.gsub("(.:format)", "").scan(/:\w+/).map { |p| p.delete(":") },
         'controller' => route.controller,
         'action' => route.action,
-        'verb' => route.verb.split('|')
+        'verb' => route.verb.split('|'),
+        'defaults' => route.defaults.transform_keys(&:to_s)
       }
     end
   end

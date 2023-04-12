@@ -3,7 +3,7 @@ RSpec.describe LazyApiDoc::Generator do
     subject do
       LazyApiDoc::Generator.new.send(
         :query_params,
-        { 'verb' => ['GET'] },
+        { 'verb' => ['GET'], 'defaults' => {} },
         [OpenStruct.new('request' => { 'full_path' => "http://example.com?#{query}" }, 'params' => { 'f' => [1, 2, 3] },
                         'verb' => 'GET')]
       )
