@@ -1,16 +1,13 @@
 inherit_from:
   - ../.rubocop.yml
 
-require:
+plugins:
   - rubocop-rspec
 
 RSpec/ExampleLength:
   Enabled: false
 
 RSpec/DescribedClass:
-  Enabled: false
-
-RSpec/FactoryBot/CreateList:
   Enabled: false
 
 RSpec/NamedSubject:

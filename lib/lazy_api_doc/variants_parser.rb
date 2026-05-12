@@ -26,7 +26,7 @@ module LazyApiDoc
 
     def types_template(variants)
       types = types_of(variants)
-      if types.count == 1
+      if types.one?
         {
           "type" => types.first
         }
@@ -69,15 +69,15 @@ module LazyApiDoc
 
     def parse_hash(variants)
       result = types_template(variants)
-      variant = variants.select { |v| v.is_a?(Hash) }.reverse_each
+      variant = variants.grep(Hash).reverse_each
                         .with_object({}) { |v, res| res.merge!(v) }
       result["properties"] = variant.to_h do |key, val|
         [
           key.to_s,
-          parse(val, variants.select { |v| v.is_a?(Hash) }.map { |v| v.fetch(key, OPTIONAL) })
+          parse(val, variants.grep(Hash).map { |v| v.fetch(key, OPTIONAL) })
         ]
       end
-      result["required"] = variant.keys.select { |key| variants.select { |v| v.is_a?(Hash) }.all? { |v| v.key?(key) } }
+      result["required"] = variant.keys.select { |key| variants.grep(Hash).all? { |v| v.key?(key) } }
       result
     end
 

@@ -1,7 +1,7 @@
 module LazyApiDoc
   class RouteParser
     def self.find_by(example)
-      r = routes.find do |r|
+      routes.find do |r|
         r['verb'].include?(example.verb) && example.params.slice(*r['defaults'].keys) == r['defaults']
       end
     end

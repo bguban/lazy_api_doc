@@ -3,6 +3,7 @@ SimpleCov.start do
   track_files 'lib/**/*.rb'
 end
 
+require 'ostruct'
 require "bundler/setup"
 require "lazy_api_doc"
 

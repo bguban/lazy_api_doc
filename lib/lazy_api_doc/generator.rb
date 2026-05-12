@@ -1,4 +1,5 @@
 require 'cgi'
+require 'ostruct'
 
 module LazyApiDoc
   class Generator
@@ -26,6 +27,7 @@ module LazyApiDoc
                .group_by { |example| ::LazyApiDoc::RouteParser.find_by(example) }
                .each do |route, examples|
         next if route.nil? # TODO: think about adding such cases to log
+
         first = examples.first
 
         doc_path = route['doc_path']
@@ -111,7 +113,9 @@ module LazyApiDoc
       first = examples.first
       return unless %w[POST PATCH PUT DELETE].include?(first['verb'])
 
-      variants = examples.map { |example| example.params.except(*EXCLUDED_PARAMS, *route['path_params'], *route['defaults'].keys) }
+      variants = examples.map do |example|
+        example.params.except(*EXCLUDED_PARAMS, *route['path_params'], *route['defaults'].keys)
+      end
       {
         'content' => {
           first.content_type => {
