@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lazy_api_doc (0.2.5)
+    lazy_api_doc (0.2.6)
       ostruct
 
 GEM
