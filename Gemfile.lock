@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     lazy_api_doc (0.2.5)
+      ostruct
 
 GEM
   remote: https://rubygems.org/
@@ -12,6 +13,7 @@ GEM
     json (2.19.5)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
+    ostruct (0.6.3)
     parallel (1.28.0)
     parser (3.3.11.1)
       ast (~> 2.4.1)
@@ -74,4 +76,4 @@ DEPENDENCIES
   simplecov
 
 BUNDLED WITH
-   2.2.32
+  4.0.11
