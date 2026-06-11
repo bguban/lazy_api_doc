@@ -76,6 +76,12 @@ user: {
 ``` 
 After that, it just builds an OpenAPI specification based on it.
 
+## Support
+
+If you find this project useful, please consider supporting its development.
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-orange.svg)](https://www.buymeacoffee.com/bguban)
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/bguban/lazy_api_doc. This project is intended 
