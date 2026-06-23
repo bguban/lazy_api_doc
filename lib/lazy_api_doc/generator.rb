@@ -47,15 +47,22 @@ module LazyApiDoc
           "summary" => example.action,
           "parameters" => path_params(route, examples) + query_params(route, examples),
           "requestBody" => body_params(route, examples),
-          "responses" => examples.group_by { |ex| ex.response['code'] }.transform_values do |variants|
-            {
-              "description" => variants.first["description"].capitalize,
+          "responses" => examples.group_by { |ex| ex.response['code'] }.map do |code, variants|
+            responses = variants.map do |v|
+              parsed = parse_body(v.response)
+              puts "Empty response at #{v['description']}, #{route}, HTTP code #{code}" unless parsed
+            end.compact
+            [
+              code,
+              {
+                "description" => variants.first["description"].capitalize,
                 "content" => {
                   example.response['content_type'] => {
-                    "schema" => ::LazyApiDoc::VariantsParser.new(variants.map { |v| parse_body(v.response) }).result
+                    "schema" => ::LazyApiDoc::VariantsParser.new(responses).result,
                   }
                 }
-            }
+              }
+            ]
           end
         }.compact
       }
